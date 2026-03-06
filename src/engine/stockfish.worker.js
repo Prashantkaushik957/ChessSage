@@ -21,7 +21,16 @@ function loadStockfish() {
             importScripts(scriptPath)
 
             // eslint-disable-next-line no-undef
-            Stockfish().then((sf) => {
+            Stockfish({
+                locateFile: (path) => {
+                    if (path.endsWith('.wasm')) {
+                        return import.meta.env.DEV
+                            ? import.meta.env.BASE_URL + 'stockfish/' + path
+                            : new URL('../stockfish/' + path, self.location.href).href;
+                    }
+                    return path;
+                }
+            }).then((sf) => {
                 stockfish = sf
                 stockfish.addMessageListener((line) => {
                     self.postMessage({ type: 'output', line })

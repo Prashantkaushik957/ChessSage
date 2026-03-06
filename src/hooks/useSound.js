@@ -4,12 +4,12 @@ import { useGameStore } from '../store/useGameStore'
 export function useSound() {
     const { soundEnabled } = useGameStore()
 
-    // We use refs to keep the audio objects in memory so they play instantly
+    const basePath = import.meta.env.BASE_URL
     const soundsRef = useRef({
-        move: new Audio('/sounds/move.mp3'),
-        capture: new Audio('/sounds/capture.mp3'),
-        check: new Audio('/sounds/check.mp3'),
-        gameEnd: new Audio('/sounds/game-end.mp3')
+        move: new Audio(`${basePath}sounds/move.mp3`),
+        capture: new Audio(`${basePath}sounds/capture.mp3`),
+        check: new Audio(`${basePath}sounds/check.mp3`),
+        gameEnd: new Audio(`${basePath}sounds/game-end.mp3`)
     })
 
     // Preload them
