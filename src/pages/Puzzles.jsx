@@ -58,7 +58,7 @@ export function Puzzles() {
     useEffect(() => { loadNewPuzzle() }, [])
 
     const handleSquareClick = (square) => {
-        if (!puzzleGame || solved || failed) return
+        if (!puzzleGame || solved) return
 
         if (selectedSq) {
             attemptMove(selectedSq, square)
@@ -82,7 +82,7 @@ export function Puzzles() {
     }
 
     const handleDrop = (from, to) => {
-        if (!puzzleGame || solved || failed) return false
+        if (!puzzleGame || solved) return false
         return attemptMove(from, to)
     }
 
@@ -187,10 +187,10 @@ export function Puzzles() {
                             <button className="btn btn-primary" onClick={loadNewPuzzle}>Next →</button>
                         </div>
                     )}
-                    {failed && (
+                    {failed && !solved && (
                         <div className="puzzle-result puzzle-result--fail animate-fade-up">
-                            ❌ Not quite! Try the next one.
-                            <button className="btn btn-secondary" onClick={loadNewPuzzle}>Next →</button>
+                            ❌ Not quite! Try again.
+                            <button className="btn btn-secondary" onClick={loadNewPuzzle}>Skip →</button>
                         </div>
                     )}
                 </div>

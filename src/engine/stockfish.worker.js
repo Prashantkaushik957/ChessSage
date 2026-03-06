@@ -48,13 +48,13 @@ function loadStockfish() {
 
 // ELO → Stockfish Skill Level + move time mapping
 const DIFFICULTY_MAP = {
-    1: { skillLevel: 0, moveTime: 100, elo: 400, name: 'Beginner' },
-    2: { skillLevel: 3, moveTime: 200, elo: 600, name: 'Novice' },
-    3: { skillLevel: 6, moveTime: 500, elo: 900, name: 'Casual' },
-    4: { skillLevel: 10, moveTime: 800, elo: 1200, name: 'Intermediate' },
-    5: { skillLevel: 14, moveTime: 1200, elo: 1600, name: 'Advanced' },
-    6: { skillLevel: 18, moveTime: 2000, elo: 2000, name: 'Expert' },
-    7: { skillLevel: 20, moveTime: 3000, elo: 2500, name: 'Master' },
+    1: { skillLevel: 0, moveTime: 100, elo: 250, name: 'Martin' },
+    2: { skillLevel: 3, moveTime: 300, elo: 800, name: 'Nelson' },
+    3: { skillLevel: 6, moveTime: 500, elo: 1200, name: 'Iron Man' },
+    4: { skillLevel: 10, moveTime: 800, elo: 1600, name: 'Captain America' },
+    5: { skillLevel: 14, moveTime: 1200, elo: 2700, name: 'Gukesh D' },
+    6: { skillLevel: 18, moveTime: 2000, elo: 2800, name: 'Hikaru' },
+    7: { skillLevel: 20, moveTime: 3000, elo: 2882, name: 'Magnus Carlsen' },
 }
 
 let currentBestMove = null

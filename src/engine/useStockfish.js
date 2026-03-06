@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 const DIFFICULTY_MAP = {
-    1: { skillLevel: 0, moveTime: 100, elo: 400, name: 'Beginner' },
-    2: { skillLevel: 3, moveTime: 200, elo: 600, name: 'Novice' },
-    3: { skillLevel: 6, moveTime: 500, elo: 900, name: 'Casual' },
-    4: { skillLevel: 10, moveTime: 800, elo: 1200, name: 'Intermediate' },
-    5: { skillLevel: 14, moveTime: 1200, elo: 1600, name: 'Advanced' },
-    6: { skillLevel: 18, moveTime: 2000, elo: 2000, name: 'Expert' },
-    7: { skillLevel: 20, moveTime: 3000, elo: 2500, name: 'Master' },
+    1: { skillLevel: 0, moveTime: 100, elo: 250, name: 'Martin' },
+    2: { skillLevel: 3, moveTime: 300, elo: 800, name: 'Nelson' },
+    3: { skillLevel: 6, moveTime: 500, elo: 1200, name: 'Iron Man' },
+    4: { skillLevel: 10, moveTime: 800, elo: 1600, name: 'Captain America' },
+    5: { skillLevel: 14, moveTime: 1200, elo: 2700, name: 'Gukesh D' },
+    6: { skillLevel: 18, moveTime: 2000, elo: 2800, name: 'Hikaru' },
+    7: { skillLevel: 20, moveTime: 3000, elo: 2882, name: 'Magnus Carlsen' },
 }
 
 export function useStockfish() {
@@ -18,9 +18,10 @@ export function useStockfish() {
     const [evaluation, setEvaluation] = useState(0)
     const [difficulty, setDifficultyState] = useState(2)
     const pendingCallbackRef = useRef(null)
+    const timeoutRef = useRef(null)
 
-    useEffect(() => {
-        // Create worker
+    const initWorker = useCallback(() => {
+        if (workerRef.current) workerRef.current.terminate()
         const worker = new Worker(new URL('./stockfish.worker.js', import.meta.url), { type: 'classic' })
         workerRef.current = worker
 
@@ -34,6 +35,7 @@ export function useStockfish() {
                     worker.postMessage({ type: 'setDifficulty', payload: { level: 2 } })
                     break
                 case 'bestmove':
+                    clearTimeout(timeoutRef.current)
                     setIsThinking(false)
                     setBestMove(move)
                     if (pendingCallbackRef.current) {
@@ -55,14 +57,17 @@ export function useStockfish() {
             console.error('Worker error:', err)
         }
 
-        // Initialize stockfish
         worker.postMessage({ type: 'init' })
+    }, [])
+
+    useEffect(() => {
+        initWorker()
 
         return () => {
-            worker.terminate()
+            if (workerRef.current) workerRef.current.terminate()
             workerRef.current = null
         }
-    }, [])
+    }, [initWorker])
 
     const setDifficulty = useCallback((level) => {
         setDifficultyState(level)
@@ -83,7 +88,19 @@ export function useStockfish() {
             type: 'getBestMove',
             payload: { fen, moveTime: diff.moveTime }
         })
-    }, [isReady, difficulty])
+
+        // Timeout Fallback Engine Safety
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = setTimeout(() => {
+            console.warn("Stockfish froze! Triggering timeout failsafe.")
+            setIsThinking(false)
+            if (pendingCallbackRef.current) {
+                pendingCallbackRef.current('timeout')
+                pendingCallbackRef.current = null
+            }
+            initWorker() // Reboot the hung worker
+        }, diff.moveTime + 2000)
+    }, [isReady, difficulty, initWorker])
 
     const getEvaluation = useCallback((fen) => {
         if (!workerRef.current || !isReady) return

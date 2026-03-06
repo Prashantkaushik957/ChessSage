@@ -11,13 +11,13 @@ import { getRandomMessage, getOpeningMessage } from '../components/Tutor/tutorMe
 import './Game.css'
 
 const DIFFICULTY_NAMES = {
-    1: { name: 'Beginner', elo: '~400', color: '#5cb85c' },
-    2: { name: 'Novice', elo: '~600', color: '#5bc0de' },
-    3: { name: 'Casual', elo: '~900', color: '#5bc0de' },
-    4: { name: 'Intermediate', elo: '~1200', color: '#f0ad4e' },
-    5: { name: 'Advanced', elo: '~1600', color: '#f0ad4e' },
-    6: { name: 'Expert', elo: '~2000', color: '#d9534f' },
-    7: { name: 'Master', elo: '~2500', color: '#a855f7' },
+    1: { name: 'Martin', elo: '250', color: '#5cb85c', light: '#F0D9B5', dark: '#B58863', avatar: '👶' },
+    2: { name: 'Nelson', elo: '800', color: '#5cb85c', light: '#EBECD0', dark: '#739552', avatar: '😎' },
+    3: { name: 'Iron Man', elo: '1200', color: '#d9534f', light: '#f9d29d', dark: '#c72e2e', avatar: '🤖' },
+    4: { name: 'Captain America', elo: '1600', color: '#0275d8', light: '#ffffff', dark: '#00257a', avatar: '🛡️' },
+    5: { name: 'Gukesh D', elo: '2700', color: '#f0ad4e', light: '#ff9933', dark: '#138808', avatar: '🇮🇳' },
+    6: { name: 'Hikaru', elo: '2800', color: '#a855f7', light: '#e5e5e5', dark: '#333333', avatar: '👑' },
+    7: { name: 'Magnus Carlsen', elo: '2882', color: '#000000', light: '#F0D9B5', dark: '#B58863', avatar: '🐐' },
 }
 
 export function Game() {
@@ -77,20 +77,33 @@ export function Game() {
         const timer = setTimeout(() => {
             setTutorState('thinking')
             getBestMove(fen, (aiMove) => {
-                if (!aiMove || aiMove === '(none)') return
-                const result = makeMoveFromUCI(aiMove)
+                let finalMove = aiMove
+
+                if (aiMove === 'timeout') {
+                    const legalMovesVerbose = game.moves({ verbose: true })
+                    if (legalMovesVerbose.length > 0) {
+                        const randomMove = legalMovesVerbose[Math.floor(Math.random() * legalMovesVerbose.length)]
+                        finalMove = randomMove.from + randomMove.to + (randomMove.promotion || '')
+                        showTutorMessage("Stockfish hesitated... generating fallback move!", 'error', 4000)
+                    } else {
+                        return
+                    }
+                } else if (!aiMove || aiMove === '(none)') {
+                    return
+                }
+
+                const result = makeMoveFromUCI(finalMove)
                 if (!result) return
 
-                // Evaluate quality of AI move for commentary
-                const evalDelta = evaluation - prevEval
                 setPrevEval(evaluation)
-
-                if (Math.abs(evaluation) > 900) {
-                    showTutorMessage(getRandomMessage('idle'), 'idle', 3000)
-                } else {
-                    setTimeout(() => {
-                        setTutorState('idle')
-                    }, 500)
+                if (aiMove !== 'timeout') {
+                    if (Math.abs(evaluation) > 900) {
+                        showTutorMessage(getRandomMessage('idle'), 'idle', 3000)
+                    } else {
+                        setTimeout(() => {
+                            setTutorState('idle')
+                        }, 500)
+                    }
                 }
             })
         }, 300)
@@ -235,8 +248,8 @@ export function Game() {
             <div className="game-board-section">
                 {/* Player info bars */}
                 <div className="game-player-bar game-player-bar--top">
-                    <span className="game-player-avatar">{playerColor === 'w' ? '🤖' : '👤'}</span>
-                    <span className="game-player-name">{playerColor === 'w' ? `ChessBot (${diffInfo.elo})` : 'You'}</span>
+                    <span className="game-player-avatar">{playerColor === 'w' ? diffInfo.avatar : '👤'}</span>
+                    <span className="game-player-name">{playerColor === 'w' ? `${diffInfo.name} (${diffInfo.elo})` : 'You'}</span>
                     {isThinking && <span className="game-thinking-badge animate-shimmer">Thinking...</span>}
                 </div>
 
@@ -254,16 +267,16 @@ export function Game() {
                                 : '0 8px 40px rgba(0,0,0,0.6)',
                             overflow: 'hidden',
                         }}
-                        customLightSquareStyle={{ backgroundColor: '#F0D9B5' }}
-                        customDarkSquareStyle={{ backgroundColor: '#B58863' }}
+                        customLightSquareStyle={{ backgroundColor: diffInfo.light || '#F0D9B5' }}
+                        customDarkSquareStyle={{ backgroundColor: diffInfo.dark || '#B58863' }}
                         animationDuration={200}
                         arePiecesDraggable={gameStarted && !isGameOver}
                     />
                 </div>
 
                 <div className="game-player-bar game-player-bar--bottom">
-                    <span className="game-player-avatar">{playerColor === 'w' ? '👤' : '🤖'}</span>
-                    <span className="game-player-name">{playerColor === 'w' ? 'You' : `ChessBot (${diffInfo.elo})`}</span>
+                    <span className="game-player-avatar">{playerColor === 'w' ? '👤' : diffInfo.avatar}</span>
+                    <span className="game-player-name">{playerColor === 'w' ? 'You' : `${diffInfo.name} (${diffInfo.elo})`}</span>
                     {isInCheck && turn === (playerColor === 'w' ? 'w' : 'b') && (
                         <span className="game-check-badge">⚠ CHECK!</span>
                     )}
