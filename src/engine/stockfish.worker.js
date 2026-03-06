@@ -116,8 +116,6 @@ self.onmessage = async (event) => {
         case 'setDifficulty': {
             const diff = DIFFICULTY_MAP[payload.level] || DIFFICULTY_MAP[4]
             stockfish.postMessage('setoption name Skill Level value ' + diff.skillLevel)
-            stockfish.postMessage('setoption name UCI_LimitStrength value true')
-            stockfish.postMessage('setoption name UCI_Elo value ' + diff.elo)
             self.postMessage({ type: 'difficultySet', ...diff })
             break
         }
