@@ -1,6 +1,8 @@
 # ♟️ ChessSage (Mac App)
 
-> **An offline, AI-powered desktop chess learning application designed beautifully for macOS.**
+> **An offline, AI-powered desktop chess learning application designed beautifully for macOS. Also available on the web!**
+
+### 🌐 [Play Live on the Web Here: https://Prashantkaushik957.github.io/ChessSage/](https://Prashantkaushik957.github.io/ChessSage/)
 
 ![ChessSage Preview](public/icon.png)
 

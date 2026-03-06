@@ -11,7 +11,14 @@ let initialized = false
 function loadStockfish() {
     return new Promise((resolve, reject) => {
         try {
-            importScripts('/stockfish/stockfish-18-lite-single.js')
+            // In Vite production, this worker is at /assets/worker-[hash].js, 
+            // so we go up one directory to reach the public /stockfish folder.
+            // In dev mode, it's served from the root.
+            const scriptPath = typeof process !== 'undefined' || self.location.pathname.includes('/assets/')
+                ? '../stockfish/stockfish-18-lite-single.js'
+                : '/stockfish/stockfish-18-lite-single.js'
+
+            importScripts(scriptPath)
 
             // eslint-disable-next-line no-undef
             Stockfish().then((sf) => {
