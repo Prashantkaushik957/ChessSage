@@ -98,6 +98,7 @@ export function Puzzles() {
             if (nextIndex >= currentPuzzle.solutionMoves.length) {
                 // Puzzle solved!
                 setSolved(true)
+                setSelectedSq(null)
                 setStreak(s => s + 1)
                 solvePuzzle(currentPuzzle.id, true)
                 showMsg(getRandomMessage('puzzleSolve'), 'celebrating', 5000)
@@ -112,11 +113,13 @@ export function Puzzles() {
             }
             setFen(puzzleGame.fen())
             setMoveIndex(nextIndex)
+            setSelectedSq(null)
             return true
         } else {
             // Wrong move
             puzzleGame.undo()
             setFailed(true)
+            setSelectedSq(null)
             setStreak(0)
             solvePuzzle(currentPuzzle.id, false)
             showMsg(getRandomMessage('puzzleFail'), 'error', 5000)

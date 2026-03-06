@@ -141,7 +141,7 @@ export function Game() {
                 }
                 return
             }
-            // Not a valid destination — select new piece
+            // Not a valid destination — but allow re-selecting pieces
             setSelectedSquare(null)
             setLegalMoveSquares({})
         }
@@ -175,7 +175,11 @@ export function Game() {
         if (!isPlayerTurn || !gameStarted || isGameOver || isThinking) return false
 
         const result = makeMove(sourceSquare, targetSquare)
-        if (!result) return false
+        if (!result) {
+            setSelectedSquare(null)
+            setLegalMoveSquares({})
+            return false
+        }
 
         setSelectedSquare(null)
         setLegalMoveSquares({})

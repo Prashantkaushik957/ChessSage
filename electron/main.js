@@ -100,14 +100,15 @@ function createWindow() {
     }
 }
 
-// IPC Handlers
-ipcMain.handle('store:get', (event, key) => store ? store.get(key) : null)
-ipcMain.handle('store:set', (event, key, value) => { if (store) store.set(key, value) })
-ipcMain.handle('store:delete', (event, key) => { if (store) store.delete(key) })
-ipcMain.handle('app:getVersion', () => app.getVersion())
-
+// IPC Handlers attached when app is ready
 app.whenReady().then(async () => {
-    await initStore()
+    store = await initStore()
+
+    ipcMain.handle('store:get', (event, key) => store ? store.get(key) : null)
+    ipcMain.handle('store:set', (event, key, value) => { if (store) store.set(key, value) })
+    ipcMain.handle('store:delete', (event, key) => { if (store) store.delete(key) })
+    ipcMain.handle('app:getVersion', () => app.getVersion())
+
     createWindow()
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
