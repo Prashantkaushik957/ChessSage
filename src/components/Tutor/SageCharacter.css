@@ -1,0 +1,111 @@
+.sage-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* State-based animations */
+.sage-state-idle .sage-svg {
+    animation: float-gentle 4s ease-in-out infinite;
+}
+
+.sage-state-thinking .sage-svg {
+    animation: sage-think 2s ease-in-out infinite;
+}
+
+.sage-state-celebrating .sage-svg {
+    animation: bounce 0.6s ease;
+}
+
+.sage-state-error .sage-svg {
+    animation: shake 0.4s ease;
+}
+
+.sage-state-welcome .sage-svg {
+    animation: sage-wave 1s ease-in-out;
+}
+
+.sage-state-explaining .sage-svg {
+    animation: float-gentle 3s ease-in-out infinite;
+}
+
+@keyframes sage-think {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-1deg);
+    }
+
+    50% {
+        transform: translateY(-3px) rotate(1deg);
+    }
+}
+
+@keyframes sage-wave {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(-5deg) translateY(-4px);
+    }
+
+    40% {
+        transform: rotate(5deg) translateY(-6px);
+    }
+
+    60% {
+        transform: rotate(-3deg) translateY(-4px);
+    }
+
+    80% {
+        transform: rotate(3deg) translateY(-2px);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Hat star sparkle */
+.hat-star {
+    animation: spin 6s linear infinite;
+    transform-origin: 50px 24px;
+    transform-box: fill-box;
+}
+
+/* Thinking dots */
+.thinking-dot {
+    animation: thinking-dots 1.2s ease-in-out infinite;
+}
+
+/* Sparkles */
+.sparkle-star {
+    fill: var(--accent-gold, #D4AF37);
+    animation: sparkle 1s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+/* Left arm wave when welcoming */
+.sage-state-welcome .sage-left-arm {
+    animation: arm-wave 0.8s ease-in-out alternate infinite;
+    transform-origin: 30px 95px;
+    transform-box: fill-box;
+}
+
+@keyframes arm-wave {
+    from {
+        transform: rotate(-10deg);
+    }
+
+    to {
+        transform: rotate(10deg);
+    }
+}
+
+/* Staff glow */
+.sage-staff circle {
+    animation: pulse-glow-gold 2s ease-in-out infinite;
+}

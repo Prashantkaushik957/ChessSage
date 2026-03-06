@@ -1,0 +1,90 @@
+.analysis-page {
+    overflow-y: auto;
+}
+
+.analysis-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.pgn-input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.pgn-textarea {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: monospace;
+    font-size: 0.82rem;
+    padding: 10px 14px;
+    resize: vertical;
+    outline: none;
+}
+
+.pgn-textarea:focus {
+    border-color: var(--accent-jade);
+}
+
+.analysis-layout {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.analysis-eval-bar {
+    width: 24px;
+    padding: 40px 0;
+    align-self: stretch;
+    display: flex;
+}
+
+.analysis-board-wrap {
+    width: min(520px, calc(100vh - 200px));
+    aspect-ratio: 1;
+    flex-shrink: 0;
+}
+
+.analysis-right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 200px;
+}
+
+.analysis-eval-card {
+    text-align: center;
+}
+
+.eval-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+}
+
+.eval-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.analysis-move-list {
+    flex: 1;
+    min-height: 200px;
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.analysis-tutor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}

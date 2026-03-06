@@ -1,0 +1,260 @@
+.game-page {
+    display: flex;
+    height: 100%;
+    gap: 0;
+    overflow: hidden;
+    padding: 16px;
+    gap: 12px;
+    background: var(--bg-primary);
+}
+
+/* ── Eval Bar ── */
+.game-eval-bar {
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 0;
+}
+
+/* ── Board section ── */
+.game-board-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.game-board-wrapper {
+    max-width: 560px;
+    width: min(560px, calc(100vh - 200px));
+    aspect-ratio: 1;
+}
+
+/* ── Player info bars ── */
+.game-player-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 560px;
+    padding: 6px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+}
+
+.game-player-avatar {
+    font-size: 1.1rem;
+}
+
+.game-player-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.game-thinking-badge {
+    font-size: 0.7rem;
+    color: var(--accent-jade);
+    padding: 2px 8px;
+    border-radius: 99px;
+    border: 1px solid var(--border-accent);
+    background: var(--accent-jade-glow);
+}
+
+.game-check-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent-red);
+    padding: 2px 8px;
+    border-radius: 99px;
+    border: 1px solid rgba(224, 92, 106, 0.4);
+    background: rgba(224, 92, 106, 0.1);
+    animation: pulse-glow-jade 1s ease infinite;
+}
+
+/* ── Controls ── */
+.game-controls {
+    width: 100%;
+    max-width: 560px;
+}
+
+.game-start-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+}
+
+.game-color-select {
+    display: flex;
+    gap: 10px;
+}
+
+.game-action-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+}
+
+.game-turn-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.turn-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.turn-dot--white {
+    background: #f5f5f0;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+.turn-dot--black {
+    background: #2a2a2a;
+    border: 1px solid #666;
+}
+
+/* ── Right panel ── */
+.game-right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+    max-width: 260px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.game-opening-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    color: var(--accent-jade);
+    font-weight: 500;
+}
+
+.game-difficulty-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.difficulty-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.diff-btn {
+    padding: 3px 8px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    border: 1px solid var(--border-primary);
+    border-radius: 99px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: var(--font-body);
+}
+
+.diff-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.diff-btn--active {
+    background: var(--bg-card);
+    font-weight: 700;
+}
+
+.game-move-list {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ── Tutor ── */
+.game-tutor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+}
+
+.tutor-inner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.tutor-name {
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* ── Game Over Modal ── */
+.game-over-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.game-over-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+    text-align: center;
+    min-width: 300px;
+    box-shadow: var(--shadow-jade), var(--shadow-lg);
+}
+
+.game-over-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.game-over-reason {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 8px 0 24px;
+}
+
+.game-over-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}

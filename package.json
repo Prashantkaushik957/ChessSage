@@ -1,0 +1,64 @@
+{
+  "name": "chess-learning-app",
+  "version": "1.0.0",
+  "description": "An offline, AI-powered chess learning app for Mac",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently -k \"npm run dev:vite\" \"npm run dev:electron\"",
+    "dev:vite": "vite",
+    "dev:electron": "wait-on tcp:5173 && electron .",
+    "build": "vite build",
+    "build:mac": "npm run build && electron-builder --mac",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "chess",
+    "electron",
+    "react",
+    "offline"
+  ],
+  "author": "Chess Learning App",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^9.1.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "vite": "^5.4.11",
+    "wait-on": "^8.0.1"
+  },
+  "dependencies": {
+    "chess.js": "^1.3.0",
+    "electron-store": "^10.0.0",
+    "framer-motion": "^11.12.0",
+    "react": "^18.3.1",
+    "react-chessboard": "^4.7.2",
+    "react-dom": "^18.3.1",
+    "stockfish": "^18.0.5",
+    "zustand": "^5.0.2"
+  },
+  "build": {
+    "appId": "com.chesslearning.app",
+    "productName": "Chess Learning App",
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "public/icon.icns",
+      "category": "public.app-category.games"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "public/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "public/stockfish",
+        "to": "stockfish"
+      }
+    ],
+    "asar": true
+  }
+}
