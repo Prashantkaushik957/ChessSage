@@ -11,12 +11,12 @@ let initialized = false
 function loadStockfish() {
     return new Promise((resolve, reject) => {
         try {
-            // In Vite production, this worker is at /assets/worker-[hash].js, 
-            // so we go up one directory to reach the public /stockfish folder.
-            // In dev mode, it's served from the root.
-            const scriptPath = typeof process !== 'undefined' || self.location.pathname.includes('/assets/')
-                ? '../stockfish/stockfish-18-lite-single.js'
-                : '/stockfish/stockfish-18-lite-single.js'
+            let scriptPath;
+            if (import.meta.env.DEV) {
+                scriptPath = import.meta.env.BASE_URL + 'stockfish/stockfish-18-lite-single.js';
+            } else {
+                scriptPath = new URL('../stockfish/stockfish-18-lite-single.js', self.location.href).href;
+            }
 
             importScripts(scriptPath)
 
