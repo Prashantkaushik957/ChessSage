@@ -5,6 +5,7 @@ import { SageCharacter } from '../components/Tutor/SageCharacter'
 import { SpeechBubble } from '../components/Tutor/SpeechBubble'
 import { useProgressStore } from '../store/useGameStore'
 import { getRandomMessage } from '../components/Tutor/tutorMessages'
+import { useSound } from '../hooks/useSound'
 import puzzles from '../assets/puzzles_1000.json'
 import './Puzzles.css'
 
@@ -23,6 +24,7 @@ export function Puzzles() {
     const [failed, setFailed] = useState(false)
     const [tutorState, setTutorState] = useState('idle')
     const [tutorMsg, setTutorMsg] = useState('')
+    const { playSound } = useSound()
     const [showBubble, setShowBubble] = useState(false)
     const [legalMoves, setLegalMoves] = useState({})
     const [selectedSq, setSelectedSq] = useState(null)
@@ -97,16 +99,29 @@ export function Puzzles() {
             const nextIndex = moveIndex + 1
             if (nextIndex >= currentPuzzle.solutionMoves.length) {
                 // Puzzle solved!
+                playSound('gameEnd')
                 setSolved(true)
                 setSelectedSq(null)
                 setStreak(s => s + 1)
                 solvePuzzle(currentPuzzle.id, true)
                 showMsg(getRandomMessage('puzzleSolve'), 'celebrating', 5000)
             } else {
+                if (puzzleGame.inCheck()) {
+                    playSound('check')
+                } else if (move.captured) {
+                    playSound('capture')
+                } else {
+                    playSound('move')
+                }
+
                 // Make opponent's reply automatically
                 const replyUCI = currentPuzzle.solutionMoves[nextIndex]
                 setTimeout(() => {
-                    puzzleGame.move({ from: replyUCI.slice(0, 2), to: replyUCI.slice(2, 4), promotion: replyUCI[4] || undefined })
+                    const reply = puzzleGame.move({ from: replyUCI.slice(0, 2), to: replyUCI.slice(2, 4), promotion: replyUCI[4] || undefined })
+                    if (puzzleGame.inCheck()) playSound('check')
+                    else if (reply && reply.captured) playSound('capture')
+                    else playSound('move')
+
                     setFen(puzzleGame.fen())
                     setMoveIndex(nextIndex + 1)
                 }, 500)

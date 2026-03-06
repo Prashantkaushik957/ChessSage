@@ -1,9 +1,11 @@
 import { useState, useCallback, useRef } from 'react'
 import { Chess } from 'chess.js'
 import { OPENINGS } from './openings'
+import { useSound } from '../hooks/useSound'
 
 export function useChessGame() {
     const gameRef = useRef(new Chess())
+    const { playSound } = useSound()
     const [fen, setFen] = useState(gameRef.current.fen())
     const [history, setHistory] = useState([])
     const [currentMoveIndex, setCurrentMoveIndex] = useState(-1)
@@ -12,7 +14,7 @@ export function useChessGame() {
     const [lastMove, setLastMove] = useState(null)
     const [gameOver, setGameOver] = useState(null) // null | { result, reason }
 
-    const updateState = useCallback(() => {
+    const updateState = useCallback((moveInfo = null) => {
         const game = gameRef.current
         const newFen = game.fen()
         setFen(newFen)
@@ -37,7 +39,8 @@ export function useChessGame() {
         if (opening) setOpeningName(opening)
 
         // Check game over
-        if (game.isGameOver()) {
+        const isGameEnded = game.isGameOver()
+        if (isGameEnded) {
             let result, reason
             if (game.isCheckmate()) {
                 result = game.turn() === 'w' ? 'black' : 'white'
@@ -50,8 +53,20 @@ export function useChessGame() {
                             : 'fifty-move-rule'
             }
             setGameOver({ result, reason })
+            playSound('gameEnd')
         } else {
             setGameOver(null)
+
+            // Audio feedback for regular moves if not game over
+            if (moveInfo) {
+                if (game.inCheck()) {
+                    playSound('check')
+                } else if (moveInfo.captured) {
+                    playSound('capture')
+                } else {
+                    playSound('move')
+                }
+            }
         }
 
         // Track last move
@@ -59,7 +74,7 @@ export function useChessGame() {
             const last = hist[hist.length - 1]
             setLastMove({ from: last.from, to: last.to })
         }
-    }, [])
+    }, [playSound])
 
     const makeMove = useCallback((from, to, promotion = 'q') => {
         const game = gameRef.current
@@ -67,7 +82,7 @@ export function useChessGame() {
             const prevFen = game.fen()
             const move = game.move({ from, to, promotion })
             if (!move) return null
-            updateState()
+            updateState(move)
             return { move, prevFen }
         } catch {
             return null
